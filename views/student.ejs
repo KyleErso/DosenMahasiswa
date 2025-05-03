@@ -1,0 +1,56 @@
+<div class="container mt-4">
+  <h1>Data Siswa</h1>
+  <form method="POST" action="/students/add">
+    <input type="text" name="name" placeholder="Nama" required class="form-control mb-2">
+    <input type="text" name="nrp" placeholder="NRP" required class="form-control mb-2">
+    <button type="submit" class="btn btn-primary">Tambah Siswa</button>
+  </form>
+  <ul class="mt-3 list-group">
+    <% students.forEach(function(s) { %>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>ID: <%= s.id %> - <%= s.name %> - <%= s.nrp %></span>
+        <div>
+          <!-- Tombol Edit, memicu modal edit -->
+          <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-<%= s.id %>">
+            Edit
+          </button>
+          <!-- Tombol Hapus -->
+          <a href="/students/delete/<%= s.id %>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus siswa ini?')">
+            Hapus
+          </a>
+        </div>
+      </li>
+      <!-- Debug info: Tampilkan object siswa -->
+      <pre><%= JSON.stringify(s, null, 2) %></pre>
+      
+      <!-- Modal Edit -->
+      <div class="modal fade" id="editModal-<%= s.id %>" tabindex="-1" aria-labelledby="editModalLabel-<%= s.id %>" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="POST" action="/students/update/<%= s.id %>">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel-<%= s.id %>">Edit Siswa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="name-<%= s.id %>" class="form-label">Nama</label>
+                  <input type="text" class="form-control" id="name-<%= s.id %>" name="name" value="<%= s.name %>" required>
+                </div>
+                <div class="mb-3">
+                  <label for="nrp-<%= s.id %>" class="form-label">NRP</label>
+                  <input type="text" class="form-control" id="nrp-<%= s.id %>" name="nrp" value="<%= s.nrp %>" required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+    <% }); %>
+  </ul>
+</div>
